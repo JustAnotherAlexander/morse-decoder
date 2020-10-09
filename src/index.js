@@ -39,32 +39,90 @@ const MORSE_TABLE = {
 
 function decode(expr) {
 
+    let Morse_Codes = [
+        [['.-'],     ['a']],
+        [['-...'],   ['b']],
+        [['-.-.'],   ['c']],
+        [['-..'],    ['d']],
+        [['.'],      ['e']],
+        [['..-.'],   ['f']],
+        [['--.'],    ['g']],
+        [['....'],   ['h']],
+        [['..'],     ['i']],
+        [['.---'],   ['j']],
+        [['-.-'],    ['k']],
+        [['.-..'],   ['l']],
+        [['--'],     ['m']],
+        [['-.'],     ['n']],
+        [['---'],    ['o']],
+        [['.--.'],   ['p']],
+        [['--.-'],   ['q']],
+        [['.-.'],    ['r']],
+        [['...'],    ['s']],
+        [['-'],      ['t']],
+        [['..-'],    ['u']],
+        [['...-'],   ['v']],
+        [['.--'],    ['w']],
+        [['-..-'],   ['x']],
+        [['-.--'],   ['y']],
+        [['--..'],   ['z']],
+        [['.----'],  ['1']],
+        [['..---'],  ['2']],
+        [['...--'],  ['3']],
+        [['....-'],  ['4']],
+        [['.....'],  ['5']],
+        [['-....'],  ['6']],
+        [['--...'],  ['7']],
+        [['---..'],  ['8']],
+        [['----.'],  ['9']],
+        [['-----'],  ['0']],
+    ]
+
     expr=expr.split('');
     let result =[];
-    let dots_and_dashes = [];
 
     while (expr.length>0) {
     result.push(expr.splice(0,10));
     }
-    console.log('morse code: '+ result);
-    console.log('result[0]: '+result[0]);
-    for (let j=0; j<result.length; j++) {
-        for (let i=0; i<10; i+2) {
-            dots_and_dashes.push(result[j].splice(i,2));
-        }
-        for (let k=0; k<10; k++) {
-            if ((dots_and_dashes[k][0]==1 && dots_and_dashes[k][1]==1)){
-                dots_and_dashes.splice(0,2,'-');
-            } else if ((dots_and_dashes[k][0]==1 && dots_and_dashes[k][1]==0)) {
-                dots_and_dashes.splice(0,2,'.');
-              } else if ((dots_and_dashes[k][0]==0 && dots_and_dashes[k][1]==0)) {
-                dots_and_dashes.splice(k,1);
+
+    for (let i=0; i<result.length; i++) {
+
+        for (let j=0; j<result[i].length;) {
+
+            if (result[i][j]=='.' || result[i][j]=='-' || result[i][j]=='*') {
+                j++;
+                continue;
+            }
+            if ((result[i][j]==1 && result[i][j+1]==1)){
+                result[i].splice(j,2,'-');
+
+                j=0;
+            } else if (result[i][j]==1 && result[i][j+1]==0) {
+                result[i].splice(j,2,'.');
+ 
+                j=0;
+            } else if (result[i][j]==0 && result[i][j+1]==0) {
+                result[i].splice(j,2);
+ 
+                j=0;
             }
         }
-        result[j]=dots_and_dashes.join('');
+
     }
-    
-    console.log(result);
+    for (let i=0; i<result.length; i++) {
+        result[i]=result[i].join('');
+        for (let j=0; j<Morse_Codes.length; j++) {
+
+            if (result[i]==Morse_Codes[j][0]) {
+                result[i]=Morse_Codes[j][1];
+            }
+        }
+        if (result[i]=='**********') {
+            result[i]=' ';
+        }
+    }
+
+return result.join('');
 }
 
 
